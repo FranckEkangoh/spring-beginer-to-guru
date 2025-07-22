@@ -55,7 +55,7 @@ class BeerControllerTest {
         .price(BigDecimal.valueOf(12.99))
         .quantityOnHand(122)
         .createdDate(LocalDateTime.now())
-        .updateDate(LocalDateTime.now())
+        .updatedDate(LocalDateTime.now())
         .build();
 
     BeerDTO beer2 = BeerDTO.builder()
@@ -67,7 +67,7 @@ class BeerControllerTest {
         .price(BigDecimal.valueOf(11.99))
         .quantityOnHand(392)
         .createdDate(LocalDateTime.now())
-        .updateDate(LocalDateTime.now())
+        .updatedDate(LocalDateTime.now())
         .build();
 
     BeerDTO beer3 = BeerDTO.builder()
@@ -79,7 +79,7 @@ class BeerControllerTest {
         .price(BigDecimal.valueOf(13.99))
         .quantityOnHand(144)
         .createdDate(LocalDateTime.now())
-        .updateDate(LocalDateTime.now())
+        .updatedDate(LocalDateTime.now())
         .build();
     listOfBeers = Arrays.asList(beer1, beer2, beer3);
   }
@@ -121,7 +121,7 @@ class BeerControllerTest {
         .price(BigDecimal.valueOf(12.99))
         .quantityOnHand(122)
         .createdDate(LocalDateTime.now())
-        .updateDate(LocalDateTime.now())
+        .updatedDate(LocalDateTime.now())
         .build();
 
     given(beerService.saveNewBeer(beer)).willReturn(beer);

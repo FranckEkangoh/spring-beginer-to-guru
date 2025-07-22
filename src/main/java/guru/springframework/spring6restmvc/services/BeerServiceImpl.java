@@ -34,7 +34,7 @@ public class BeerServiceImpl implements BeerService {
         .price(BigDecimal.valueOf(12.99))
         .quantityOnHand(122)
         .createdDate(LocalDateTime.now())
-        .updateDate(LocalDateTime.now())
+        .updatedDate(LocalDateTime.now())
         .build();
 
     BeerDTO beer2 = BeerDTO.builder()
@@ -46,7 +46,7 @@ public class BeerServiceImpl implements BeerService {
         .price(BigDecimal.valueOf(11.99))
         .quantityOnHand(392)
         .createdDate(LocalDateTime.now())
-        .updateDate(LocalDateTime.now())
+        .updatedDate(LocalDateTime.now())
         .build();
 
     BeerDTO beer3 = BeerDTO.builder()
@@ -58,7 +58,7 @@ public class BeerServiceImpl implements BeerService {
         .price(BigDecimal.valueOf(13.99))
         .quantityOnHand(144)
         .createdDate(LocalDateTime.now())
-        .updateDate(LocalDateTime.now())
+        .updatedDate(LocalDateTime.now())
         .build();
 
     beerMap.put(beer1.getId(), beer1);
@@ -93,7 +93,7 @@ public class BeerServiceImpl implements BeerService {
       Optional.ofNullable(beer.getQuantityOnHand()).ifPresent(existingBeer::setQuantityOnHand);
       Optional.ofNullable(beer.getVersion()).ifPresent(existingBeer::setVersion);
       Optional.ofNullable(beer.getBeerStyle()).ifPresent(existingBeer::setBeerStyle);
-      existingBeer.setUpdateDate(LocalDateTime.now());
+      existingBeer.setUpdatedDate(LocalDateTime.now());
     }
     return beerMap.put(id, beer);
   }

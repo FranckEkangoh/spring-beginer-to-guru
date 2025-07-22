@@ -4,7 +4,6 @@ package guru.springframework.spring6restmvc.domain;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Version;
 import java.time.LocalDateTime;
@@ -34,5 +33,5 @@ public class Customer {
   @Version
   private Integer version;
   private LocalDateTime createdDate;
-  private LocalDateTime modifiedDate;
+  private LocalDateTime updatedDate;
 }

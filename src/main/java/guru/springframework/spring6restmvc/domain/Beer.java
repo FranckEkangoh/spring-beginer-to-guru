@@ -5,7 +5,6 @@ import guru.springframework.spring6restmvc.model.BeerStyle;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Version;
 import java.math.BigDecimal;
@@ -40,5 +39,5 @@ public class Beer {
   private Integer quantityOnHand;
   private BigDecimal price;
   private LocalDateTime createdDate;
-  private LocalDateTime modifiedDate;
+  private LocalDateTime updatedDate;
 }

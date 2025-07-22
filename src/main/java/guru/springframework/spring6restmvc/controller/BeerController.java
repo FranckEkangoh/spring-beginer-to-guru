@@ -48,7 +48,7 @@ public class BeerController {
   public ResponseEntity<BeerDTO> createBeer(@RequestBody BeerDTO beer){
     beer.setId(UUID.randomUUID());
     beer.setCreatedDate(LocalDateTime.now());
-    beer.setUpdateDate(LocalDateTime.now());
+    beer.setUpdatedDate(LocalDateTime.now());
     log.debug("Create Beer - in controller");
     beerService.saveNewBeer(beer);
 
