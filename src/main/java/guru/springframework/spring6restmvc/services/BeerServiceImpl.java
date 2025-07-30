@@ -79,6 +79,7 @@ public class BeerServiceImpl implements BeerService {
 
   @Override
   public BeerDTO saveNewBeer(BeerDTO beer) {
+    log.info("Save New Beer - in service without JPA");
     beerMap.put(beer.getId(), beer);
     return beerMap.get(beer.getId());
   }
