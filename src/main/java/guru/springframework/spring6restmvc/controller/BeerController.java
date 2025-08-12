@@ -32,7 +32,7 @@ public class BeerController {
 
   private final BeerService beerService;
 
-  @GetMapping("{id}")
+  @GetMapping("/id")
   public BeerDTO getBeerById(@PathVariable UUID id){
     log.debug("Get Beer by Id - in controller");
     return beerService.getBeerById(id).orElseThrow(NotFoundException::new);
@@ -55,14 +55,14 @@ public class BeerController {
     return ResponseEntity.created(URI.create("/api/v1/beer/" + beer.getId())).body(beer);
   }
 
-  @PutMapping("{id}")
+  @PutMapping("/id")
   public ResponseEntity<BeerDTO> updateBeer(@PathVariable UUID id, @RequestBody BeerDTO beer){
     log.debug("Update Beer - in controller");
     BeerDTO updatedBeer = beerService.updatedBeer(id, beer);
     return new ResponseEntity<>(updatedBeer, HttpStatus.OK);
   }
 
-  @DeleteMapping("{id}")
+  @DeleteMapping("/id")
   public ResponseEntity<BeerDTO> deleteBeer(@PathVariable UUID id){
     log.debug("Delete Beer - in controller");
     beerService.deleteBeer(id);
