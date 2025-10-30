@@ -8,7 +8,9 @@ import guru.springframework.spring6restmvc.repositories.BeerRepository;
 import guru.springframework.spring6restmvc.specification.BeerSpecification;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,6 +19,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+@Slf4j
 @Service
 @Primary
 @RequiredArgsConstructor
@@ -29,33 +32,31 @@ public class BeerServiceJPA implements BeerService {
 
   @Override
   public Optional<BeerDTO> getBeerById(UUID id) {
-    return Optional.empty();
-  }
-
-  @Override
-  public Page<BeerDTO> listBeers(String beerName) {
-    Page<Beer> beerList;
-    PageRequest pageRequest = buildPageRequest(DEFAULT_PAGE, DEFAULT_PAGE_SIZE);
-    if (StringUtils.hasText(beerName)) {
-      beerList = beerRepository.findByBeerNameIsLikeIgnoreCase("%" + beerName + "%" ,pageRequest);
-    } else {
-      beerList = beerRepository.findAll(pageRequest);
-    }
-    return beerList.map(beerMapper::beerToBeerDTO);
-  }
-
-  @Override
-  public Page<BeerDTO> searchBeers(BeerSearchDto beer, Boolean showInventory, Integer pageNumber,
-      Integer pageSize) {
-    PageRequest pageRequest = buildPageRequest(pageNumber, pageSize);
-
-    return beerRepository.findAll(BeerSpecification.searchBeer(beer), pageRequest)
+    return beerRepository.findById(id)
         .map(beerMapper::beerToBeerDTO);
   }
 
   @Override
-  public BeerDTO saveNewBeer(BeerDTO beer) {
-    return null;
+  public List<BeerDTO> listBeers() {
+    return beerRepository.findAll()
+        .stream()
+        .map(beerMapper::beerToBeerDTO)
+        .collect(Collectors.toList());
+  }
+
+  @Override
+  public BeerDTO saveNewBeer(BeerDTO beerDto) {
+    log.info("Saving new beer in service JPA");
+    Beer beer = Beer.builder()
+        .beerName(beerDto.getBeerName())
+        .beerStyle(beerDto.getBeerStyle())
+        .beerName(beerDto.getBeerName())
+        .price(beerDto.getPrice())
+        .quantityOnHand(beerDto.getQuantityOnHand())
+        .createdDate(beerDto.getCreatedDate())
+        .updatedDate(beerDto.getUpdatedDate())
+        .build();
+    return beerMapper.beerToBeerDTO(beerRepository.save(beer));
   }
 
   @Override

@@ -21,4 +21,5 @@ public class ExceptionController {
     System.out.println("Handle BadRequestException - in controller");
     return ResponseEntity.badRequest().build();
   }
+
 }
