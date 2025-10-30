@@ -1,12 +1,17 @@
 package guru.springframework.spring6restmvc.services;
 
 import guru.springframework.spring6restmvc.model.BeerDTO;
+import guru.springframework.spring6restmvc.model.BeerSearchDto;
 import guru.springframework.spring6restmvc.model.BeerStyle;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -21,6 +26,12 @@ import java.util.UUID;
 public class BeerServiceImpl implements BeerService {
 
   private final Map<UUID, BeerDTO> beerMap;
+
+  @Override
+  public Page<BeerDTO> searchBeers(BeerSearchDto beer, Boolean showInventory, Integer pageNumber,
+      Integer pageSize) {
+    return Page.empty();
+  }
 
   public BeerServiceImpl() {
     this.beerMap = new HashMap<>();
@@ -73,8 +84,8 @@ public class BeerServiceImpl implements BeerService {
   }
 
   @Override
-  public List<BeerDTO>listBeers() {
-    return beerMap.values().stream().toList();
+  public Page<BeerDTO> listBeers(String beerName) {
+    return new PageImpl<>(new ArrayList<>(beerMap.values()), PageRequest.of(0, 25), beerMap.size());
   }
 
   @Override
