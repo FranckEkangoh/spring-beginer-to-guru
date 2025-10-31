@@ -11,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -84,8 +83,8 @@ public class BeerServiceImpl implements BeerService {
   }
 
   @Override
-  public Page<BeerDTO> listBeers(String beerName) {
-    return new PageImpl<>(new ArrayList<>(beerMap.values()), PageRequest.of(0, 25), beerMap.size());
+  public Page<BeerDTO> listBeers(String beerName, Boolean showInventory, Integer pageNumber, Integer pageSize) {
+    return new PageImpl<>(new ArrayList<>(beerMap.values()), PageRequest.of(pageNumber, pageSize), beerMap.size());
   }
 
   @Override

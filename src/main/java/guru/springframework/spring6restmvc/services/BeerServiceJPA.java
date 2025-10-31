@@ -8,16 +8,13 @@ import guru.springframework.spring6restmvc.repositories.BeerRepository;
 import guru.springframework.spring6restmvc.specification.BeerSpecification;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 @Slf4j
 @Service
@@ -37,11 +34,20 @@ public class BeerServiceJPA implements BeerService {
   }
 
   @Override
-  public List<BeerDTO> listBeers() {
-    return beerRepository.findAll()
-        .stream()
-        .map(beerMapper::beerToBeerDTO)
-        .collect(Collectors.toList());
+  public Page<BeerDTO> listBeers(String beerName, Boolean showInventory, Integer pageNumber, Integer pageSize) {
+    PageRequest page = buildPageRequest(pageNumber, pageSize);
+    Page<Beer> pageBeer;
+
+    if (beerName == null) {
+      pageBeer = beerRepository.findAll(page);
+    } else {
+      pageBeer = beerRepository.findByBeerNameIsLikeIgnoreCase("%" + beerName + "%", page);
+    }
+    if (showInventory != null && !showInventory) {
+      pageBeer.forEach(beer -> beer.setQuantityOnHand(null));
+    }
+
+    return pageBeer.map(beerMapper::beerToBeerDTO);
   }
 
   @Override
@@ -56,6 +62,7 @@ public class BeerServiceJPA implements BeerService {
         .createdDate(beerDto.getCreatedDate())
         .updatedDate(beerDto.getUpdatedDate())
         .build();
+
     return beerMapper.beerToBeerDTO(beerRepository.save(beer));
   }
 
@@ -67,6 +74,18 @@ public class BeerServiceJPA implements BeerService {
   @Override
   public void deleteBeer(UUID id) {
 
+  }
+
+  @Override
+  public Page<BeerDTO> searchBeers(BeerSearchDto beer, Boolean showInventory, Integer pageNumber,
+      Integer pageSize) {
+    PageRequest page = buildPageRequest(pageNumber, pageSize);
+    Page<Beer> beerPage = beerRepository.findAll(BeerSpecification.searchBeer(beer), page);
+
+    if (showInventory != null && !showInventory) {
+      beerPage.forEach(b -> b.setQuantityOnHand(null));
+    }
+    return beerPage.map(beerMapper::beerToBeerDTO);
   }
 
   public PageRequest buildPageRequest(Integer pageNumber, Integer pageSize) {
@@ -87,6 +106,7 @@ public class BeerServiceJPA implements BeerService {
         queryPageSize = pageSize;
       }
     }
+
     return PageRequest.of(queryPageNumber, queryPageSize, Sort.by(Sort.Order.asc("beerName")));
   }
 }

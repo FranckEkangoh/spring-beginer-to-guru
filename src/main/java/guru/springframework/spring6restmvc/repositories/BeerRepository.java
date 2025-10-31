@@ -10,4 +10,5 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 public interface BeerRepository extends JpaRepository<Beer, UUID>, JpaSpecificationExecutor<Beer> {
 
   Page<Beer> findByBeerNameIsLikeIgnoreCase (String beerName, Pageable pageable);
+
 }
