@@ -37,7 +37,7 @@ import java.net.URI;
 public class BeerController {
 
   private final BeerService beerService;
-  private final PagedResourcesAssembler<BeerDTO> assembler;
+
 
   @GetMapping("/{id}")
   public BeerDTO getBeerById(@PathVariable UUID id){
@@ -46,9 +46,13 @@ public class BeerController {
   }
 
   @GetMapping
-  public ResponseEntity<PagedModel<EntityModel<BeerDTO>>> getAllBeers(@RequestParam(required = false) String beerName){
+  public ResponseEntity<PagedModel<EntityModel<BeerDTO>>> getAllBeers(@RequestParam(required = false) String beerName,
+      @RequestParam(required = false) Boolean showInventory,
+      @RequestParam(required = false) Integer pageNumber,
+      @RequestParam(required = false) Integer pageSize,
+      PagedResourcesAssembler<BeerDTO> assembler){
     log.debug("Get All Beers");
-    Page<BeerDTO> page = beerService.listBeers(beerName);
+    Page<BeerDTO> page = beerService.listBeers(beerName,  showInventory, pageNumber, pageSize);
     PagedModel<EntityModel<BeerDTO>> pagedModel = assembler.toModel(page);
     return ResponseEntity.ok(pagedModel);
   }
@@ -72,12 +76,15 @@ public class BeerController {
   }
 
   @PostMapping("/search")
-  public ResponseEntity<Page<BeerDTO>> searchBeers(@RequestBody BeerSearchDto beer,
+  public ResponseEntity<PagedModel<EntityModel<BeerDTO>>> searchBeers(@RequestBody BeerSearchDto beer,
       @RequestParam(required = false) Boolean showInventory,
       @RequestParam(required = false) Integer pageNumber,
-      @RequestParam(required = false) Integer pageSize) {
+      @RequestParam(required = false) Integer pageSize,
+      PagedResourcesAssembler<BeerDTO> assembler) {
     log.debug("Search Beer - in controller");
-    return ResponseEntity.ok(beerService.searchBeers(beer, showInventory, pageNumber, pageSize));
+    Page<BeerDTO> page = beerService.searchBeers(beer, showInventory, pageNumber, pageSize);
+
+    return ResponseEntity.ok(assembler.toModel(page));
   }
 
   @DeleteMapping("/{id}")
