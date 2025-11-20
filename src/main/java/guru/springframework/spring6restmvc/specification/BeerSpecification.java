@@ -1,7 +1,7 @@
 package guru.springframework.spring6restmvc.specification;
 
 
-import guru.springframework.spring6restmvc.domain.Beer;
+import guru.springframework.spring6restmvc.entities.Beer;
 import guru.springframework.spring6restmvc.model.BeerSearchDto;
 import jakarta.persistence.criteria.Predicate;
 import java.util.ArrayList;
