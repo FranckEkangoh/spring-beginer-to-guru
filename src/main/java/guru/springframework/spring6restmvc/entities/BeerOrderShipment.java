@@ -1,10 +1,10 @@
-package guru.springframework.spring6restmvc.domain;
-
+package guru.springframework.spring6restmvc.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Version;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -13,30 +13,37 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.annotations.UuidGenerator;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.type.SqlTypes;
 
-@Builder
 @Getter
 @Setter
-@Entity
-@AllArgsConstructor
+@Builder
 @NoArgsConstructor
-public class Customer {
+@AllArgsConstructor
+@Entity
+public class BeerOrderShipment {
 
   @Id
-  @GeneratedValue(generator = "UUID")
-  @UuidGenerator
+  @GeneratedValue
   @JdbcTypeCode(SqlTypes.CHAR)
-  @Column(length = 36, nullable = false, updatable = false, columnDefinition = "varchar(36)")
+  @Column(length = 36, columnDefinition = "varchar(36)",  updatable = false, nullable = false)
   private UUID id;
-  private String name;
 
-  @Column(length = 100)
-  private String email;
-  @Version
-  private Integer version;
+  private String trackingNumber;
+
+  @CreationTimestamp
+  @Column(nullable = false, updatable = false)
   private LocalDateTime createdDate;
+
+  @UpdateTimestamp
   private LocalDateTime updatedDate;
+
+  @Version
+  private Long version;
+
+  @OneToOne
+  private BeerOrder beerOrder;
 }

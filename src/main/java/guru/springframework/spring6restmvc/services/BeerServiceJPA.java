@@ -1,6 +1,6 @@
 package guru.springframework.spring6restmvc.services;
 
-import guru.springframework.spring6restmvc.domain.Beer;
+import guru.springframework.spring6restmvc.entities.Beer;
 import guru.springframework.spring6restmvc.mappers.BeerMapper;
 import guru.springframework.spring6restmvc.model.BeerDTO;
 import guru.springframework.spring6restmvc.model.BeerSearchDto;
@@ -22,8 +22,8 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class BeerServiceJPA implements BeerService {
 
-  private final static int DEFAULT_PAGE = 0;
-  private final static int DEFAULT_PAGE_SIZE = 25;
+  private static final int DEFAULT_PAGE = 0;
+  private static final int DEFAULT_PAGE_SIZE = 25;
   private final BeerRepository beerRepository;
   private final BeerMapper beerMapper;
 
@@ -73,7 +73,10 @@ public class BeerServiceJPA implements BeerService {
 
   @Override
   public void deleteBeer(UUID id) {
-
+    beerRepository.findById(id).ifPresent(beer -> {
+      log.debug("Deleting beer in service JPA");
+      beerRepository.delete(beer);
+    });
   }
 
   @Override

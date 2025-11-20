@@ -2,7 +2,7 @@ package guru.springframework.spring6restmvc.repositories;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-import guru.springframework.spring6restmvc.domain.Beer;
+import guru.springframework.spring6restmvc.entities.Beer;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
