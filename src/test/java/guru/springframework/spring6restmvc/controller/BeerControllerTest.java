@@ -69,8 +69,8 @@ class BeerControllerTest {
             .queryParam("beerName", "%IPA%")
         )
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.content.size()", is(25)))
-        .andExpect(jsonPath("$.content[0].quantityOnHand", greaterThan(0)));
+        .andExpect(jsonPath("$._embedded.beerDTOList.size()", is(25)))
+        .andExpect(jsonPath("$._embedded.beerDTOList[0].quantityOnHand", greaterThan(0)));
   }
 
   @Test
@@ -80,7 +80,7 @@ class BeerControllerTest {
             .with(httpBasic(USER_NAME, PASSWORD))
             .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.size()", is(2410)));
+        .andExpect(jsonPath("$.page.totalElements", is(2410)));
   }
 
   @Test
