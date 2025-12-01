@@ -45,9 +45,17 @@ public class BeerOrder {
 
   @UpdateTimestamp
   private LocalDateTime lastModifiedDate;
+  private String customerRef;
+  @ManyToOne
+  private Customer customer;
+  @OneToOne(cascade = CascadeType.PERSIST)
+  private BeerOrderShipment beerOrderShipment;
+  @OneToMany(mappedBy = "beerOrder")
+  private Set<BeerOrderLine> beerOrderLines;
 
   public BeerOrder(UUID id, Long version, LocalDateTime createdDate, LocalDateTime lastModifiedDate,
-      String customerRef, Customer customer, BeerOrderShipment beerOrderShipment, Set<BeerOrderLine> beerOrderLines) {
+      String customerRef, Customer customer, BeerOrderShipment beerOrderShipment,
+      Set<BeerOrderLine> beerOrderLines) {
     this.id = id;
     this.version = version;
     this.createdDate = createdDate;
@@ -62,17 +70,6 @@ public class BeerOrder {
   public boolean isNew() {
     return id == null;
   }
-
-  private String customerRef;
-
-  @ManyToOne
-  private Customer customer;
-
-  @OneToOne(cascade = CascadeType.PERSIST)
-  private BeerOrderShipment beerOrderShipment;
-
-  @OneToMany(mappedBy = "beerOrder")
-  private Set<BeerOrderLine> beerOrderLines;
 
   public void setCustomer(Customer customer) {
     this.customer = customer;

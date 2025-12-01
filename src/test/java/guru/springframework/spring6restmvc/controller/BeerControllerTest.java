@@ -3,6 +3,7 @@ package guru.springframework.spring6restmvc.controller;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.greaterThan;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -11,6 +12,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import guru.springframework.spring6restmvc.bootstrap.BootstrapData;
+import guru.springframework.spring6restmvc.config.SpringSecConfig;
+import guru.springframework.spring6restmvc.configuration.TestContainersConfig;
 import guru.springframework.spring6restmvc.model.BeerDTO;
 import guru.springframework.spring6restmvc.model.BeerStyle;
 import guru.springframework.spring6restmvc.repositories.BeerRepository;
@@ -33,7 +36,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 @AutoConfigureMockMvc
 @Testcontainers
-@Import(BootstrapData.class)
+@Import({BootstrapData.class, SpringSecConfig.class, TestContainersConfig.class})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class BeerControllerTest {
 
@@ -48,6 +51,9 @@ class BeerControllerTest {
   @Autowired
   private BeerRepository beerRepository;
 
+  static final String USER_NAME = "user";
+  static final String  PASSWORD = "password";
+
   @Transactional
   @BeforeEach
   @Test
@@ -59,6 +65,7 @@ class BeerControllerTest {
   void testListBeersByName() throws Exception {
     mockMvc.perform(get("/api/v1/beer")
             .accept(MediaType.APPLICATION_JSON)
+            .with(httpBasic(USER_NAME, PASSWORD))
             .queryParam("beerName", "%IPA%")
         )
         .andExpect(status().isOk())
@@ -70,6 +77,7 @@ class BeerControllerTest {
   void testAllBeers() throws Exception {
     mockMvc.perform(get("/api/v1/beer")
             .accept(MediaType.APPLICATION_JSON)
+            .with(httpBasic(USER_NAME, PASSWORD))
             .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.size()", is(2410)));
@@ -91,6 +99,7 @@ class BeerControllerTest {
 
     mockMvc.perform(post("/api/v1/beer")
             .accept(MediaType.APPLICATION_JSON)
+            .with(httpBasic(USER_NAME, PASSWORD))
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(beer))
         )
